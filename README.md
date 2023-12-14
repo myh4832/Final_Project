@@ -1,19 +1,11 @@
 ## GRIT: Faster and Better Image captioning Transformer (ECCV 2022)
 
-This is the code implementation for the paper titled: "GRIT: Faster and Better Image-captioning Transformer Using Dual Visual Features" (Accepted to ECCV 2022) [[Arxiv](https://arxiv.org/abs/2207.09666)].
-
-
-## Introduction
-
-This paper proposes a Transformer neural architecture, dubbed <b>GRIT</b> (Grid- and Region-based Image captioning Transformer), that effectively utilizes the two visual features to generate better captions. GRIT replaces the CNN-based detector employed in previous methods with a DETR-based one, making it computationally faster.
-
-
 <div align=center>  
 <img src='.github/grit.png' width="100%">
 </div>
 
 
-## Model Zoo
+## Pretrained Object Detector
 | Model                                           | Task             | Checkpoint                                                                                           |
 |-------------------------------------------------|------------------|------------------------------------------------------------------------------------------------------|
 | Pretrained object detector (B) on 4 OD datasets | Object Detection | [GG Drive link](https://drive.google.com/file/d/1xERJN3CvQcUcwgRZd31CUsnep_xnELcs/view?usp=share_link)  |
@@ -77,3 +69,10 @@ We also provide the code for extracting pretrained features (freezed object dete
 export DATA_ROOT=path/to/coco_dataset
 # with pretrained object detector on 4 datasets
 python train_caption.py exp.name=caption_4ds model.detector.checkpoint=4ds_detector_path
+
+### Final Print Result
+
+최종 결과는 grit/print_result.py를 실행하면 출력됩니다.
+
+```shell
+python print_result.py
