@@ -16,10 +16,7 @@ This paper proposes a Transformer neural architecture, dubbed <b>GRIT</b> (Grid-
 ## Model Zoo
 | Model                                           | Task             | Checkpoint                                                                                           |
 |-------------------------------------------------|------------------|------------------------------------------------------------------------------------------------------|
-| Pretrained object detector (A) on Visual Genome | Object Detection | [GG Drive link](https://drive.google.com/file/d/1ZWPovkK5YhxtyCaVULCTNoPu8Jd-MKGh/view?usp=share_link)  |
 | Pretrained object detector (B) on 4 OD datasets | Object Detection | [GG Drive link](https://drive.google.com/file/d/1xERJN3CvQcUcwgRZd31CUsnep_xnELcs/view?usp=share_link)  |
-| GRIT (using the object detector A)              | Image Captioning | [GG Drive link](https://drive.google.com/file/d/12tsI3Meka2mNLON-tWTnVJnUzUOa-foW/view?usp=share_link) |
-| GRIT (using the object detector B)              | Image Captioning | [GG Drive link](https://drive.google.com/file/d/1jgEqNFuKcKg_RcG4Nq8bhWvCgzi6bjuD/view?usp=share_link) |
 
 ## Installation
 
@@ -30,7 +27,7 @@ This paper proposes a Transformer neural architecture, dubbed <b>GRIT</b> (Grid-
 
 * First, clone the repository locally:
 ```shell
-git clone https://github.com/davidnvq/grit.git
+git clone https://github.com/myh4832/Final_Project.git
 cd grit
 ```
 * Then, create an environment and install PyTorch and torchvision:
@@ -80,92 +77,3 @@ We also provide the code for extracting pretrained features (freezed object dete
 export DATA_ROOT=path/to/coco_dataset
 # with pretrained object detector on 4 datasets
 python train_caption.py exp.name=caption_4ds model.detector.checkpoint=4ds_detector_path
-
-# with pretrained object detector on Visual Genome
-python train_caption.py exp.name=caption_4ds model.detector.checkpoint=vg_detector_path
-```
-
-<!-- * **More configurations will be added here for obtaining ablation results**. -->
-* To freeze the backbone and detector, we can extract the region features and initial grid features first, saving it to `dataset.hdf5_path` in the config file.
-
-**Noted that: this additional strategy will only achieve about 134 CIDEr (as reported by some researchers). To obtain 139.2 CIDEr, please train the model with freezed backbone/detector (in Pytorch, using `if 'backbone'/'detector' in n: p.requires_grad = False`) with image augmentation at every iteration. It means that we read and process every image during training rather than loading `extracted features` from hdf5.**
-
-Then we can run the following script to train the model:
-```shell
-export DATA_ROOT=path/to/coco_dataset
-# with pretrained object detector on 4 datasets
-python train_caption.py exp.name=caption_4ds model.detector.checkpoint=4ds_detector_path \
-optimizer.freezing_xe_epochs=10 \
-optimizer.freezing_sc_epochs=10 \
-optimizer.finetune_xe_epochs=0 \
-optimizer.finetune_sc_epochs=0 \
-optimizer.freeze_backbone=True \
-optimizer.freeze_detector=True
-```
-
-### Evaluation
-
-The evaluation will be run on a single GPU.
-* Evaluation on **Karapthy splits**:
-```shell
-export DATA_ROOT=path/to/coco_caption
-# evaluate on the validation split
-python eval_caption.py +split='valid' exp.checkpoint=path_to_caption_checkpoint
-
-# evaluate on the test split
-python eval_caption.py +split='test' exp.checkpoint=path_to_caption_checkpoint
-```
-* Evaluation on the **online splits**:
-```shell
-export DATA_ROOT=path/to/coco_caption
-# evaluate on the validation split
-python eval_caption_online.py +split='valid' exp.checkpoint=path_to_caption_checkpoint
-
-# evaluate on the test split
-python eval_caption_online.py +split='test' exp.checkpoint=path_to_caption_checkpoint
-```
-
-### Inference on RGB Image
-
-* Perform Inference for a single image using the script `inference_caption.py`:
-```
-python inference_caption.py +img_path='notebooks/COCO_val2014_000000000772.jpg' \
-+vocab_path='data/vocab.json' \
-exp.checkpoint='path_to_caption_checkpoint'
-```
-*  Perform Inference for a single image using the Jupyter notebook `notebooks/Inference.ipynb`
-```shell
-# Require installing Jupyter(lab)
-pip install jupyterlab
-
-cd notebooks
-# Open jupyter notebook
-jupyter lab
-```
-
-### Finetune / Retrain GRIT on your own Dataset
-We provide an example of how we finetune GRIT on the custom dataset (here is Vietnamese Image Captioning). 
-Interestingly, the result shows that the GRIT checkpoint on COCO (English) benefits another language captioning task.
-You may need to modify a few files only. For exapmle, we prepare 3 files in the [vicap branch](https://github.com/davidnvq/grit/tree/vicap):
-* https://github.com/davidnvq/grit/blob/vicap/train_vicap.py
-* https://github.com/davidnvq/grit/blob/vicap/vicap_dataset.py
-* https://github.com/davidnvq/grit/blob/vicap/configs/caption/vicap_config.yaml
-
-
-
-
-## Citation
-If you find this code useful, please kindly cite the paper with the following bibtex:
-```bibtex
-@inproceedings{nguyen2022grit,
-  title={Grit: Faster and better image captioning transformer using dual visual features},
-  author={Nguyen, Van-Quang and Suganuma, Masanori and Okatani, Takayuki},
-  booktitle={Computer Vision--ECCV 2022: 17th European Conference, Tel Aviv, Israel, October 23--27, 2022, Proceedings, Part XXXVI},
-  pages={167--184},
-  year={2022},
-  organization={Springer}
-}
-```
-
-## Acknowledgement
-We have inherited several open source projects into ours: i) implmentation of [Swin Transformer](https://github.com/microsoft/Swin-Transformer), ii) implementation of [Deformable DETR](https://github.com/fundamentalvision/Deformable-DETR), and iii) implementation of image captioning base from [M2-Transformer](https://github.com/aimagelab/meshed-memory-transformer). We thank the authors of these open source projects.
