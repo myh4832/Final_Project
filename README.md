@@ -69,6 +69,7 @@ We also provide the code for extracting pretrained features (freezed object dete
 export DATA_ROOT=path/to/coco_dataset
 # with pretrained object detector on 4 datasets
 python train_caption.py exp.name=caption_4ds model.detector.checkpoint=4ds_detector_path
+```
 
 ### Final Print Result
 
@@ -76,3 +77,4 @@ python train_caption.py exp.name=caption_4ds model.detector.checkpoint=4ds_detec
 
 ```shell
 python print_result.py
+```
