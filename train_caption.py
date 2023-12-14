@@ -25,6 +25,7 @@ def main(gpu, config):
     # dist init
     torch.backends.cudnn.enabled = False
     rank = config.exp.rank * config.exp.ngpus_per_node + gpu
+    print(rank, gpu)
     dist.init_process_group('nccl', 'env://', rank=rank, world_size=config.exp.world_size)
 
     torch.manual_seed(config.exp.seed)
@@ -210,7 +211,7 @@ def run_main(config: DictConfig) -> None:
 
 
 if __name__ == "__main__":
-    # os.environ["DATA_ROOT"] = "/home/quang/datasets/coco_caption"
+    os.environ["DATA_ROOT"] = "/home/myhong/Project/"
     os.environ["MASTER_ADDR"] = "localhost"
     os.environ["MASTER_PORT"] = "6688"
     run_main()

@@ -211,6 +211,7 @@ class COCO(CPairedDataset):
             'cap': (roots['train']['cap'], roots['valid']['cap'])
         }
 
+        """
         if ann_root is not None:
             ids = {}
             ids['train'] = np.load(os.path.join(ann_root, 'coco_train_ids.npy'))
@@ -224,7 +225,8 @@ class COCO(CPairedDataset):
                 roots['train'] = roots['trainrestval']
                 ids['train'] = ids['trainrestval']
         else:
-            ids = None
+        """
+        ids = None
 
         self.train_examples, self.valid_examples, self.test_examples = self.get_samples(roots, ids)
 
@@ -258,7 +260,7 @@ class COCO(CPairedDataset):
                 root = (roots[split]['img'],)
 
             if ids_dataset is None:
-                ids = list(coco_dataset.anns.keys())
+                ids = list(coco_dataset[0].anns.keys())
             else:
                 ids = ids_dataset[split]
 
