@@ -51,24 +51,20 @@ Download and extract COCO 2014 for image captioning including train, val, and te
 We expect the directory structure to be the following:
 ```
 path/to/coco_caption/
-├── annotations/  # annotation json files and Karapthy files
+├── annotations/  # annotation json files
 ├── train2014/    # train images
 ├── val2014/      # val images
-└── test2014/     # test images
 ```
-* Copy the files in `data/` to the above `annotations` folder. It includes `vocab.json` and some files containing Karapthy ids.
 
 ### Training
 
 The model is trained with default settings in the configurations file in `configs/caption/coco_config.yaml`:
-The training process takes around 16 hours on a machine with 8 A100 GPU.
-We also provide the code for extracting pretrained features (freezed object detector), which will speed up the training significantly.
 
-* With default configurations (e.g., 'parallel Attention', pretrained detectors on VG or 4DS, etc):
+* With default configurations (e.g., 'parallel Attention', pretrained detectors on 4DS, etc):
 ```shell
 export DATA_ROOT=path/to/coco_dataset
 # with pretrained object detector on 4 datasets
-python train_caption.py exp.name=caption_4ds model.detector.checkpoint=4ds_detector_path
+python train_caption.py exp.name=caption_4ds model.detector.checkpoint=./detector_checkpoint_4ds.pth
 ```
 
 ### Final Print Result
