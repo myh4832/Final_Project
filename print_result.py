@@ -1,6 +1,6 @@
 import pandas as pd
 
-result = pd.read_csv('../caption_4ds_2/result.csv')
+result = pd.read_csv('./outputs/caption_4ds/result.csv')
 
 score_sum = result[' B4'] + result[' M']
 
